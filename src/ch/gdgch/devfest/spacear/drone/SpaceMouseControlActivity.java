@@ -5,6 +5,7 @@ import java.net.InetAddress;
 
 
 import com.codeminders.ardrone.ARDrone;
+import com.codeminders.ardrone.R.id;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -22,10 +23,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class SpaceMouseControlActivity extends Activity {
 
+	private final static int AXIS_MAX=400;
 	private UsbManager mManager;
 	private UsbDevice mDevice;
 	private UsbDeviceConnection mDeviceConnection;
@@ -33,6 +36,7 @@ public class SpaceMouseControlActivity extends Activity {
 	private UsbEndpoint mEndpointIn;
 	private PendingIntent mPermissionIntent;
 	private TextView conn_tv,nick_tv,roll_tv,yaw_tv,alt_tv,btns_tv,drone_state_tv;
+	private ProgressBar nick_pb,roll_pb,yaw_pb,alt_pb;
 	
 	private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
 
@@ -58,6 +62,19 @@ public class SpaceMouseControlActivity extends Activity {
 		yaw_tv=(TextView)findViewById(R.id.yaw);
 		alt_tv=(TextView)findViewById(R.id.alt);
 		btns_tv=(TextView)findViewById(R.id.btns);
+		
+		
+		roll_pb=(ProgressBar)findViewById(R.id.roll_progress);
+		nick_pb=(ProgressBar)findViewById(R.id.nick_progress);
+		alt_pb=(ProgressBar)findViewById(R.id.alt_progress);
+		yaw_pb=(ProgressBar)findViewById(R.id.yaw_progress);
+		
+		roll_pb.setMax(2*AXIS_MAX);
+		nick_pb.setMax(2*AXIS_MAX);
+		
+		yaw_pb.setMax(2*AXIS_MAX);
+		alt_pb.setMax(2*AXIS_MAX);
+		
 		drone_state_tv=(TextView)findViewById(R.id.drone_state);
 		
 		mHandler.post(new UpdateRunnable());
@@ -181,6 +198,11 @@ public class SpaceMouseControlActivity extends Activity {
 
 		@Override
 		public void run() {
+			nick_pb.setProgress((int)translate[1]+AXIS_MAX);
+			roll_pb.setProgress((int)translate[0]+AXIS_MAX);
+			alt_pb.setProgress((int)translate[2]+AXIS_MAX);
+			yaw_pb.setProgress((int)rotation[2]+AXIS_MAX);
+
 			nick_tv.setText("" + translate[1]);
 			roll_tv.setText("" + translate[0]);
 			alt_tv.setText("" + translate[2]);
@@ -195,7 +217,7 @@ public class SpaceMouseControlActivity extends Activity {
 			if (drone_state==DroneState.FLYING) 
 	        try {
 	        	
-				drone.move(translate[0]/600f, translate[1]/600f,translate[2]/1200, rotation[2]/360f);
+				drone.move(translate[0]/600f, translate[1]/600f,translate[2]/-800f, rotation[2]/360f);
 			} catch (IOException e1) {
 			}
 			
