@@ -191,7 +191,13 @@ public class SpaceMouseControlActivity extends Activity {
 			
 			drone_state_tv.setText(""+drone_state);
 
-	        //drone.move(left_right_tilt, front_back_tilt, vertical_speed, angular_speed)
+			
+			if (drone_state==DroneState.FLYING) 
+	        try {
+	        	
+				drone.move(translate[0]/600f, translate[1]/600f,translate[2]/1200, rotation[2]/360f);
+			} catch (IOException e1) {
+			}
 			
 			if ((btns==1)&&(drone_state==DroneState.CONNECTED || drone_state==DroneState.LANDED)) {
 				
@@ -361,45 +367,6 @@ public class SpaceMouseControlActivity extends Activity {
                   {
             		  
             		  drone_state=DroneState.CONNECTED;
-            		  
-            		  Thread.sleep(1000);
-            		  Log.i(TAG,"clear emergency");
-                      drone.clearEmergencySignal();
-                      Log.i(TAG,"trim");
-                      drone.trim();
-                      Log.i(TAG,"takeof");
-                      drone.takeOff();
-                      
-                      Thread.sleep(6000);
-            		  
-                      /*Log.i(TAG,"turn");
-                      
-                      drone .move(0f, 0f,0f,0.9f);
-                      
-                      Thread.sleep(5000);
-                      
-                      Log.i(TAG,"turn");
-                      
-                      
-                      for (int i=1;i<36;i++) {
-                      drone .move(0f, 0f,0f,0.9f);
-               
-                      Thread.sleep(1000);}
-                      
-                      Log.i(TAG,"turn");
-                      
-                      drone .move(0f, 0f,0f,-0.9f);
-               
-                      Thread.sleep(5000);
-                      */                
-                      
-                      Log.i(TAG,"land");
-                      drone.land();
-                      
-                      Thread.sleep(1000);
-            		  
-                      Log.i(TAG,"disconn");
-                      //drone.disconnect();
                       
                   } catch(Throwable e)
                   {
@@ -411,9 +378,6 @@ public class SpaceMouseControlActivity extends Activity {
                 mainActivity.showButtons();
                 */
             } else {
-                /*state.setTextColor(Color.RED);
-                state.setText("Error");
-                */
             }
         }
     }
