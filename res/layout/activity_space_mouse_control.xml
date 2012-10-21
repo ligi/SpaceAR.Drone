@@ -7,20 +7,17 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="11dp"
+        android:paddingTop="11dp"
         android:text="SpaceMouse"
         android:textStyle="bold"
-        tools:context=".SpaceMouseControlActivity" 
-        android:paddingTop="11dp"
-        android:paddingLeft="11dp"
-        
-        />
+        tools:context=".SpaceMouseControlActivity" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="23dp"
-         >
+        android:paddingLeft="23dp" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -34,7 +31,6 @@
             android:layout_height="wrap_content"
             tools:context=".SpaceMouseControlActivity" />
     </LinearLayout>
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -59,10 +55,10 @@
         android:id="@+id/nick_progress"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
         android:paddingLeft="23dp"
         android:paddingRight="23dp" />
-        
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -86,10 +82,10 @@
         android:id="@+id/roll_progress"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
         android:paddingLeft="23dp"
-        android:paddingRight="23dp"  />
-    
+        android:paddingRight="23dp" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -113,10 +109,10 @@
         android:id="@+id/yaw_progress"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
         android:paddingLeft="23dp"
-        android:paddingRight="23dp"  />
-    
+        android:paddingRight="23dp" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -140,10 +136,10 @@
         android:id="@+id/alt_progress"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
         android:paddingLeft="23dp"
-        android:paddingRight="23dp"  />
-    
+        android:paddingRight="23dp" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -166,13 +162,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Drone"
         android:paddingLeft="11dp"
         android:paddingTop="21dp"
+        android:text="Drone"
         android:textStyle="bold"
         tools:context=".SpaceMouseControlActivity" />
 
-        <LinearLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -190,6 +186,35 @@
             android:layout_height="wrap_content"
             tools:context=".SpaceMouseControlActivity" />
     </LinearLayout>
-    
-    
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="11dp"
+        android:paddingTop="21dp"
+        android:text="Config"
+        android:textStyle="bold"
+        tools:context=".SpaceMouseControlActivity" />
+
+    <CheckBox
+        android:id="@+id/use_rotation_axis_cb"
+        android:text="use rotation and not translate axis" 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="23dp"
+        />
+
+    <TextView
+		android:text="Sensitivity:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="23dp"
+        tools:context=".SpaceMouseControlActivity" />
+
+    <SeekBar
+        android:id="@+id/sensitivity_seek"
+        android:paddingLeft="23dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

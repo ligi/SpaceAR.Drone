@@ -5,8 +5,6 @@ import java.net.InetAddress;
 
 
 import com.codeminders.ardrone.ARDrone;
-import com.codeminders.ardrone.R.id;
-
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -23,7 +21,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.CheckBox;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class SpaceMouseControlActivity extends Activity {
@@ -37,6 +37,8 @@ public class SpaceMouseControlActivity extends Activity {
 	private PendingIntent mPermissionIntent;
 	private TextView conn_tv,nick_tv,roll_tv,yaw_tv,alt_tv,btns_tv,drone_state_tv;
 	private ProgressBar nick_pb,roll_pb,yaw_pb,alt_pb;
+	private CheckBox use_rotation_axis_cb;
+	private SeekBar sensitivity_seek;
 	
 	private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
 
@@ -63,6 +65,11 @@ public class SpaceMouseControlActivity extends Activity {
 		alt_tv=(TextView)findViewById(R.id.alt);
 		btns_tv=(TextView)findViewById(R.id.btns);
 		
+		use_rotation_axis_cb=(CheckBox)findViewById(R.id.use_rotation_axis_cb);
+		sensitivity_seek=(SeekBar)findViewById(R.id.sensitivity_seek);
+		
+		sensitivity_seek.setMax(100);
+		sensitivity_seek.setProgress(70);
 		
 		roll_pb=(ProgressBar)findViewById(R.id.roll_progress);
 		nick_pb=(ProgressBar)findViewById(R.id.nick_progress);
@@ -198,16 +205,29 @@ public class SpaceMouseControlActivity extends Activity {
 
 		@Override
 		public void run() {
-			nick_pb.setProgress((int)translate[1]+AXIS_MAX);
-			roll_pb.setProgress((int)translate[0]+AXIS_MAX);
-			alt_pb.setProgress((int)translate[2]+AXIS_MAX);
-			yaw_pb.setProgress((int)rotation[2]+AXIS_MAX);
-
-			nick_tv.setText("" + translate[1]);
-			roll_tv.setText("" + translate[0]);
-			alt_tv.setText("" + translate[2]);
 			
-			yaw_tv.setText("" + rotation[2]);
+			int act_nick, act_roll,act_alt,act_yaw;
+			
+			if (!use_rotation_axis_cb.isChecked()) {
+				act_nick=(int)translate[1];
+				act_roll=(int)translate[0];
+			} else {
+				act_nick=(int)rotation[0];
+				act_roll=(int)-rotation[1];
+				
+			}
+			act_alt=(int)translate[2];
+			act_yaw=(int)rotation[2];
+			
+			nick_pb.setProgress((int)act_nick+AXIS_MAX);
+			roll_pb.setProgress((int)act_roll+AXIS_MAX);
+			alt_pb.setProgress((int)act_alt+AXIS_MAX);
+			yaw_pb.setProgress((int)act_yaw+AXIS_MAX);
+
+			nick_tv.setText("" + act_nick);
+			roll_tv.setText("" + act_roll);
+			alt_tv.setText("" + act_alt);
+			yaw_tv.setText("" + act_yaw);
 			
 			btns_tv.setText("" + btns);
 			
@@ -217,7 +237,7 @@ public class SpaceMouseControlActivity extends Activity {
 			if (drone_state==DroneState.FLYING) 
 	        try {
 	        	
-				drone.move(translate[0]/600f, translate[1]/600f,translate[2]/-800f, rotation[2]/360f);
+				drone.move(act_roll/600f, act_nick/600f,act_alt/-800f, act_yaw/360f);
 			} catch (IOException e1) {
 			}
 			
