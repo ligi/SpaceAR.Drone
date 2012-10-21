@@ -1,0 +1,11 @@
+bin/
+gen/
+project.properties
+.DS_Store
+._*
+
+# Idea
+out/
+.idea/
+*.iml
+
