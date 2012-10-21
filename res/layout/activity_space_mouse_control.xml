@@ -15,7 +15,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="10dp" >
+        android:paddingLeft="23dp"
+        android:paddingTop="11dp" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -34,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="10dp" >
+        android:paddingLeft="23dp" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -53,7 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="10dp" >
+        android:paddingLeft="23dp" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -72,7 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="10dp" >
+        android:paddingLeft="23dp" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -91,7 +92,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="10dp" >
+        android:paddingLeft="23dp" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -110,7 +111,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="10dp" >
+        android:paddingLeft="23dp" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -125,4 +126,33 @@
             tools:context=".SpaceMouseControlActivity" />
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Drone"
+        android:paddingLeft="11dp"
+        android:paddingTop="21dp"
+        android:textStyle="bold"
+        tools:context=".SpaceMouseControlActivity" />
+
+        <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="23dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="State:"
+            tools:context=".SpaceMouseControlActivity" />
+
+        <TextView
+            android:id="@+id/drone_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:context=".SpaceMouseControlActivity" />
+    </LinearLayout>
+    
+    
 </LinearLayout>

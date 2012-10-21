@@ -1,5 +1,11 @@
 package ch.gdgch.devfest.spacear.drone;
 
+import java.io.IOException;
+import java.net.InetAddress;
+
+
+import com.codeminders.ardrone.ARDrone;
+
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -12,8 +18,10 @@ import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbEndpoint;
 import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.TextView;
 
 public class SpaceMouseControlActivity extends Activity {
@@ -24,7 +32,7 @@ public class SpaceMouseControlActivity extends Activity {
 	private UsbInterface mInterface;
 	private UsbEndpoint mEndpointIn;
 	private PendingIntent mPermissionIntent;
-	private TextView conn_tv,nick_tv,roll_tv,yaw_tv,alt_tv,btns_tv;
+	private TextView conn_tv,nick_tv,roll_tv,yaw_tv,alt_tv,btns_tv,drone_state_tv;
 	
 	private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
 
@@ -37,6 +45,10 @@ public class SpaceMouseControlActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+
+        
+		
 		setContentView(R.layout.activity_space_mouse_control);
 
 		conn_tv=(TextView)findViewById(R.id.connection);
@@ -46,9 +58,11 @@ public class SpaceMouseControlActivity extends Activity {
 		yaw_tv=(TextView)findViewById(R.id.yaw);
 		alt_tv=(TextView)findViewById(R.id.alt);
 		btns_tv=(TextView)findViewById(R.id.btns);
+		drone_state_tv=(TextView)findViewById(R.id.drone_state);
+		
+		mHandler.post(new UpdateRunnable());
 		
 		conn_tv.setText("false");
-		
 		
 		mManager = (UsbManager) getSystemService(Context.USB_SERVICE);
 		mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(
@@ -127,6 +141,9 @@ public class SpaceMouseControlActivity extends Activity {
 					mInterface = intf;
 
 					conn_tv.setText("found reading thread started");
+		
+					(new DroneStarter()).execute(SpaceMouseControlActivity.drone); 
+			        
 					mWaiterThread.start();
 					return true;
 				} else {
@@ -151,6 +168,15 @@ public class SpaceMouseControlActivity extends Activity {
 
 	Handler mHandler=new Handler();
 	
+	enum DroneState {
+		CONNECTING,
+		CONNECTED,
+		LANDED,
+		FLYING
+	}
+	
+	DroneState drone_state=DroneState.CONNECTING;
+	
 	class UpdateRunnable implements Runnable {
 
 		@Override
@@ -162,6 +188,42 @@ public class SpaceMouseControlActivity extends Activity {
 			yaw_tv.setText("" + rotation[2]);
 			
 			btns_tv.setText("" + btns);
+			
+			drone_state_tv.setText(""+drone_state);
+
+	        //drone.move(left_right_tilt, front_back_tilt, vertical_speed, angular_speed)
+			
+			if ((btns==1)&&(drone_state==DroneState.CONNECTED || drone_state==DroneState.LANDED)) {
+				
+				try {
+					drone.clearEmergencySignal();
+					Log.i(TAG,"trim");
+	                drone.trim();
+	                Log.i(TAG,"takeof");
+	                drone.takeOff();
+	                
+	                drone_state=DroneState.FLYING;
+	                
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                
+			}
+			
+			if ((btns==2)&&(drone_state==DroneState.FLYING)) {
+				
+				try {
+					drone.land();
+					
+					drone_state=DroneState.LANDED;
+	                
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                
+			}
 		}
 		
 	}
@@ -244,4 +306,115 @@ public class SpaceMouseControlActivity extends Activity {
 		}
 	};
 
+
+    // drone stuff
+    public final static String TAG="SpaceMouseControl";
+    
+    private static final long CONNECTION_TIMEOUT = 10000;
+    
+    final static byte[]                     DEFAULT_DRONE_IP  = { (byte) 192, (byte) 168, (byte) 1, (byte) 1 };
+
+	static ARDrone drone;
+
+
+    private class DroneStarter extends AsyncTask<ARDrone, Integer, Boolean> {
+        
+        @Override
+        protected Boolean doInBackground(ARDrone... drones) {
+            ARDrone drone = drones[0];
+            try {
+            	Log.i(TAG,"connecting to drone");
+            	drone = new ARDrone(InetAddress.getByAddress(DEFAULT_DRONE_IP), 10000, 60000);
+                SpaceMouseControlActivity.drone = drone; // passing in null objects will not pass object refs
+                drone.connect();
+                drone.clearEmergencySignal();
+                drone.waitForReady(CONNECTION_TIMEOUT);
+                drone.playLED(1, 10, 4);
+                //drone.addImageListener(MainActivity.mainActivity);
+                //drone.selectVideoChannel(ARDrone.VideoChannel.HORIZONTAL_ONLY);
+                drone.setCombinedYawMode(false);
+                
+                return true;
+            } catch (Exception e) {
+            	Log.i(TAG,"connecting fail " + e);
+                try {
+                	
+                    drone.clearEmergencySignal();
+                    drone.clearImageListeners();
+                    drone.clearNavDataListeners();
+                    drone.clearStatusChangeListeners();
+                    drone.disconnect();
+                } catch (Exception e1) {
+                }
+              
+            }
+            return false;
+        }
+
+        
+
+        
+        protected void onPostExecute(Boolean success) {
+        	Log.i(TAG,"connecting post " + success.booleanValue());
+            if (success.booleanValue()) {
+            	  try
+                  {
+            		  
+            		  drone_state=DroneState.CONNECTED;
+            		  
+            		  Thread.sleep(1000);
+            		  Log.i(TAG,"clear emergency");
+                      drone.clearEmergencySignal();
+                      Log.i(TAG,"trim");
+                      drone.trim();
+                      Log.i(TAG,"takeof");
+                      drone.takeOff();
+                      
+                      Thread.sleep(6000);
+            		  
+                      /*Log.i(TAG,"turn");
+                      
+                      drone .move(0f, 0f,0f,0.9f);
+                      
+                      Thread.sleep(5000);
+                      
+                      Log.i(TAG,"turn");
+                      
+                      
+                      for (int i=1;i<36;i++) {
+                      drone .move(0f, 0f,0f,0.9f);
+               
+                      Thread.sleep(1000);}
+                      
+                      Log.i(TAG,"turn");
+                      
+                      drone .move(0f, 0f,0f,-0.9f);
+               
+                      Thread.sleep(5000);
+                      */                
+                      
+                      Log.i(TAG,"land");
+                      drone.land();
+                      
+                      Thread.sleep(1000);
+            		  
+                      Log.i(TAG,"disconn");
+                      //drone.disconnect();
+                      
+                  } catch(Throwable e)
+                  {
+                      e.printStackTrace();
+                  }
+                /*state.setTextColor(Color.GREEN);
+                state.setText("Connected");
+                connectButton.setEnabled(false);
+                mainActivity.showButtons();
+                */
+            } else {
+                /*state.setTextColor(Color.RED);
+                state.setText("Error");
+                */
+            }
+        }
+    }
 }
