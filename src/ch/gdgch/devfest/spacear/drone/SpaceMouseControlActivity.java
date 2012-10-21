@@ -24,7 +24,7 @@ public class SpaceMouseControlActivity extends Activity {
 	private UsbInterface mInterface;
 	private UsbEndpoint mEndpointIn;
 	private PendingIntent mPermissionIntent;
-	private TextView conn_tv,nick_tv,roll_tv,yaw_tv,alt_tv;
+	private TextView conn_tv,nick_tv,roll_tv,yaw_tv,alt_tv,btns_tv;
 	
 	private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
 
@@ -32,7 +32,8 @@ public class SpaceMouseControlActivity extends Activity {
 
 	public long[] translate = new long[3];
 	public long[] rotation = new long[3];
-
+	public byte btns;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -44,6 +45,7 @@ public class SpaceMouseControlActivity extends Activity {
 		nick_tv=(TextView)findViewById(R.id.nick);
 		yaw_tv=(TextView)findViewById(R.id.yaw);
 		alt_tv=(TextView)findViewById(R.id.alt);
+		btns_tv=(TextView)findViewById(R.id.btns);
 		
 		conn_tv.setText("false");
 		
@@ -158,6 +160,8 @@ public class SpaceMouseControlActivity extends Activity {
 			alt_tv.setText("" + translate[2]);
 			
 			yaw_tv.setText("" + rotation[2]);
+			
+			btns_tv.setText("" + btns);
 		}
 		
 	}
@@ -202,6 +206,7 @@ public class SpaceMouseControlActivity extends Activity {
 
 				else if (bytes[0] == 3) // Button packet
 				{
+					btns=bytes[1];
 				}
 				mHandler.post(new UpdateRunnable());
 				
