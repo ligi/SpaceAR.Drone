@@ -11,7 +11,6 @@ Pictures:
 
  flying with the App:
 <br/><img src="https://lh4.googleusercontent.com/-Ox8tuZAtwD0/UISBNWbKM6I/AAAAAAAADOw/ILIlloX3wdw/s1443/PANO_20121021_173736.jpg"/>
-<br/><img src="https://lh6.googleusercontent.com/-mpYOgFN_-kg/UIUIMnitXQI/AAAAAAAAgyY/gv0g0Lrc1IE/s1444/PANO_20121021_173622.jpg"/>
 <br/><img src="https://lh5.googleusercontent.com/-W0mBuwN8CaA/UIQX6qzycaI/AAAAAAAAB7c/ysT8cv3frVc/s989/20121021_173947.jpg"/>
 <br/><img src="https://lh5.googleusercontent.com/-BTft7xyZHAE/UIQYiEtCDyI/AAAAAAAAB7s/Kk8L2l05DZ0/s989/20121021_173951.jpg"/>
 <br/><img src="https://lh4.googleusercontent.com/-R08Yy6NuTa0/UIQj04r0UeI/AAAAAAAAB-o/1_RyPctA-Oo/s989/20121021_182819.jpg"/>
@@ -45,4 +44,12 @@ Pictures:
 <br/><img src="https://lh3.googleusercontent.com/-nmbXhP0wVYQ/UIQGAp9KJLI/AAAAAAAAB4g/uJF7tD2oDlM/s989/20121021_162435.jpg"/>
 <br/><img src="https://lh4.googleusercontent.com/-uxGPOhbW9LU/UIUIMob29TI/AAAAAAAAg2U/qhyglLiaYb4/s989/IMG_20121021_173041.jpg"/>
 
+
+Resources:
+ https://docs.google.com/presentation/d/1G43OMDPZxDq-6oxrOYVrg8X8_raFo7GgWMCc83gOApM/edit#slide=id.p
+
+Credits:
+ javadrone: http://code.google.com/p/javadrone/
+ Code Snippet for Reading 3D-Connexion SpaceNavigator Data: http://www.ru.3dconnexion.eu/forum/viewtopic.php?f=22&t=5339
+ 
 [1] only tested with AR.Drone 2.0 - but *could* also work with a v1.0 AR.Drone
